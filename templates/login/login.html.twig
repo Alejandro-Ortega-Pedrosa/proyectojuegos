@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if error %}
+        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+
+
+<div id="modal" class="popupContainer" style="display:block;">
+
+    <div class="popupHeader">
+        <span class="header_title">Login</span>
+        <span class="modal_close"><i class="fa fa-times"></i></span>
+
+        <div class="user_login"  style="display:block;">
+            <form action="{{ path('app_login') }}" method="post">
+                <label for="username">Email:</label>
+                <input type="text" id="username" name="_username" value="{{ last_username }}">
+                <br/>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="_password">
+                </br>
+                
+                <div class="action_btns">
+                    <div class="one_half"><a href="/register" class="btn btn-primary">Registro</a></div>
+                    <div class="one_half last"><button type="submit" class="btn btn-primary">Login</button></div>
+                </div>
+
+               
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

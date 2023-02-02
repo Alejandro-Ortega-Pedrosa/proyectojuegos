@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{parent()}}
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+
+    <style>
+        .contenedor{
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .almacen{
+            background-color: gray;
+            height: 600px;
+            width: 400px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .sala{
+            background-color: black;
+            height: 600px;
+            width: 900px;
+        }
+ 
+    </style>
+{% endblock %}
+    
+
+{% block body %}
+    {{parent()}}
+    <div class="contenedor">
+        <div class="almacen" id="almacen"></div>
+        
+        <div class="sala" id="sala"></div>
+    </div>
+{% endblock %}
