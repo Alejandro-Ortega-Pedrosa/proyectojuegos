@@ -1,37 +1,49 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% if error %}
-        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <!--BODY-->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-0">
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="bg-secondary p-5">
+                        <h1 class="text-uppercase mb-4">LOGIN</h1>
+                        <!--FORMULARIO-->
+                        <form action="{{ path('app_login') }}" method="post">
+                            {% if error %}
+                                <div class="text-primary">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                            {% endif %}
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text"  class="form-control bg-transparent" id="username" name="_username" value="{{ last_username }}">
+                                        <label for="username">Email</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="password" class="form-control bg-transparent" id="password" name="_password">
+                                        <label for="password">Password</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary w-100 py-3">Login</button>
+                                </div>
+                            </div>
+                        </form>
 
-
-
-<div id="modal" class="popupContainer" style="display:block;">
-
-    <div class="popupHeader">
-        <span class="header_title">Login</span>
-        <span class="modal_close"><i class="fa fa-times"></i></span>
-
-        <div class="user_login"  style="display:block;">
-            <form action="{{ path('app_login') }}" method="post">
-                <label for="username">Email:</label>
-                <input type="text" id="username" name="_username" value="{{ last_username }}">
-                <br/>
-
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="_password">
-                </br>
-                
-                <div class="action_btns">
-                    <div class="one_half"><a href="/register" class="btn btn-primary">Registro</a></div>
-                    <div class="one_half last"><button type="submit" class="btn btn-primary">Login</button></div>
+                    </div>
                 </div>
-
-               
-            </form>
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                    <div class="h-100" style="min-height: 400px;">
+                        <iframe class="google-map w-100 h-100"
+                        src="https://www.google.com/maps/place/IES+Las+Fuentezuelas/@37.7803484,-3.8107537,15z/data=!4m5!3m4!1s0xd6dd71774e45867:0x99df1e0032930534!8m2!3d37.7812642!4d-3.8046061"
+                        frameborder="0" allowfullscreen="" aria-hidden="false" tabindex="0" style="filter: grayscale(100%) invert(92%) contrast(83%); border: 0;"></iframe>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+
 
 {% endblock %}

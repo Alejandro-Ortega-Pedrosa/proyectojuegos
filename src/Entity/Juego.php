@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\JuegoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: JuegoRepository::class)]
@@ -27,6 +30,17 @@ class Juego
 
     #[ORM\Column]
     private ?int $nummaximo = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $foto = null;
+
+    #[ORM\OneToMany(mappedBy: 'Juego', targetEntity: Evento::class)]
+    private Collection $eventos;
+
+    public function __construct()
+    {
+        $this->eventos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -92,4 +106,52 @@ class Juego
 
         return $this;
     }
+
+    public function getFoto(): ?string
+    {
+        return $this->foto;
+    }
+
+    public function setFoto($foto): self
+    {
+        $this->foto = $foto;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->nombre;
+    }
+
+    /**
+     * @return Collection<int, Evento>
+     */
+    public function getEventos(): Collection
+    {
+        return $this->eventos;
+    }
+
+    public function addEvento(Evento $evento): self
+    {
+        if (!$this->eventos->contains($evento)) {
+            $this->eventos->add($evento);
+            $evento->setJuego($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvento(Evento $evento): self
+    {
+        if ($this->eventos->removeElement($evento)) {
+            // set the owning side to null (unless already changed)
+            if ($evento->getJuego() === $this) {
+                $evento->setJuego(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Juego;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Service\mail;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +16,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/register', name: 'app_register')]
+    private mail $mail;
+
+    public function __construct(private ManagerRegistry $doctrine,  mail $mail)
+    {
+        $this->mail =$mail;
+    }
+
+    #[Route('/', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
@@ -29,6 +39,10 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $correo=$user->getUserIdentifier();
+
+            $this->mail->sendEmail($correo);
+
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
@@ -36,8 +50,14 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('index');
         }
 
-        return $this->render('registration/register.html.twig', [
+        //BUSCA TODOS LOS JUEGOS DE LA BD
+         $juegos = $this->doctrine
+         ->getRepository(Juego::class)
+         ->findAll();
+
+        return $this->render('landingPage.html.twig', [
             'registrationForm' => $form->createView(),
+            'juegos' => $juegos,
         ]);
     }
 }

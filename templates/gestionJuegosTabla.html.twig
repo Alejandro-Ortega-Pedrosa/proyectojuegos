@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{parent()}}
+    <script src="{{ asset('js/borrado.js') }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block body %}
+    {{parent()}}
+<div class="table-responsive">
+    <table class="table table-striped" border="1px">
+    <thead class="thead-dark">
+        <tr>
+            <th>Nombre</th><th>Width</th><th>Height</th><th>Mínimo de Jugadores</th><th>Máximo de Jugadores</th><th>Foto</th><th>Acciones</th>
+        </tr>
+    </thead>
+            {% for juego in juegos %}
+            <tr>
+                <th>{{ juego.nombre }}</th><td>{{ juego.width }}</td><td>{{ juego.height }}</td><td>{{ juego.numminimo }}</td><td>{{ juego.nummaximo }}</td><td><img src='imagenes/juego/{{juego.foto}}' height="50px" width="50px"/></td><td><a href="gestionJuegosEditForm/{{juego.id}}">✏️</a><button name="id" id="{{juego.id}}">🗑️</button></td>
+            </tr>
+            {% endfor %}
+    </table>
+
+    <div class="navigation">
+        {{ knp_pagination_render(juegos) }}
+    </div>
+</div>
+<a href="gestionJuegosForm" class="btn-primary btn">Nuevo Juego</a>
+
+{% endblock %}

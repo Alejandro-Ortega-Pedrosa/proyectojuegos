@@ -44,6 +44,7 @@ class apiMesa extends AbstractController
         return $this->json($data);
     }
 
+    
     //CREA UNA NUEVA MESA SEGUN LOS DATOS PASADOS POR POST
     #[Route(path:'/mesa', name:"mesa_new", methods:'POST')]
     public function new(Request $request): Response

@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{parent()}}
+    <script src="{{ asset('js/gestionReserva.js') }}" type="text/javascript"></script>    
+    <script src="{{ asset('js/mesa.js') }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+
+    <style>
+        .contenedor{
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .formulario{
+            background-color: gray;
+            height: 600px;
+            width: 400px;
+            justify-content: space-around;
+        }
+        .sala{
+            background-color: red;
+            height: 600px;
+            width: 900px;
+        }
+        .mesa{
+            background-image: url("img/mesas.jpg");
+        }
+ 
+    </style>
+{% endblock %}
+
+{% block body %}
+    {{parent()}}
+     
+    <div class="contenedor">
+        <div class="formulario" id="almacen">
+            <form>
+                <label>Fecha de reserva</label>
+                <input type="text" id="desde">
+                <label>Juego</label>
+                <select id="juego"></select>
+                <button id="reservar">Reservar</button>
+            </form>
+        </div>
+        <div class="sala" id="sala"></div>
+    </div>
+{% endblock %}

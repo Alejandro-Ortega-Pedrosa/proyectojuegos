@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    foto_directorio_juego: '../public/imagenes/juego'
 
 services:
     # default configuration for services in *this* file
@@ -19,6 +20,11 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Service\BotTelegram:
+        arguments:
+            $token: '6196463059:AAFgGGoQ_6qPYvxJU0kjVzdUT1qZVI6BUT4'
+            $urlstart: 'https://api.telegram.org/bot'
+            $urlend: '/sendMessage'
+            $chatid: '1358296982'

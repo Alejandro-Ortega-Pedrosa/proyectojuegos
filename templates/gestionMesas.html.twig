@@ -2,6 +2,8 @@
 
 {% block javascripts %}
     {{parent()}}
+     <script src="{{ asset('js/gestionPosMesas.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/mesa.js') }}" type="text/javascript"></script>
 {% endblock %}
 
 {% block stylesheets %}
@@ -21,22 +23,28 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
+            overflow: scroll;
         }
         .sala{
-            background-color: black;
+            background-color: red;
             height: 600px;
             width: 900px;
+        }
+        .mesa{
+            background-image: url("img/mesas.jpg");
         }
  
     </style>
 {% endblock %}
-    
 
 {% block body %}
     {{parent()}}
+     
+    <label>Seleccione una fecha</label>
+    <input type="text" id="desde">
     <div class="contenedor">
         <div class="almacen" id="almacen"></div>
-        
+        <button id="btn">+</button>
         <div class="sala" id="sala"></div>
     </div>
 {% endblock %}

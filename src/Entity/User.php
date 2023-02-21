@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -37,6 +39,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $id_telegram = null;
+
+    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Reserva::class)]
+    private Collection $reservas;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Invitacion::class)]
+    private Collection $invitacions;
+
+    public function __construct()
+    {
+        $this->reservas = new ArrayCollection();
+        $this->invitacions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -140,6 +154,74 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIdTelegram(?string $id_telegram): self
     {
         $this->id_telegram = $id_telegram;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reserva>
+     */
+    public function getReservas(): Collection
+    {
+        return $this->reservas;
+    }
+
+    public function addReserva(Reserva $reserva): self
+    {
+        if (!$this->reservas->contains($reserva)) {
+            $this->reservas->add($reserva);
+            $reserva->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReserva(Reserva $reserva): self
+    {
+        if ($this->reservas->removeElement($reserva)) {
+            // set the owning side to null (unless already changed)
+            if ($reserva->getUser() === $this) {
+                $reserva->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+
+        $nombreCompleto=$this->nombre." ".$this->apellidos;
+
+        return $nombreCompleto;
+    }
+
+    /**
+     * @return Collection<int, Invitacion>
+     */
+    public function getInvitacions(): Collection
+    {
+        return $this->invitacions;
+    }
+
+    public function addInvitacion(Invitacion $invitacion): self
+    {
+        if (!$this->invitacions->contains($invitacion)) {
+            $this->invitacions->add($invitacion);
+            $invitacion->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvitacion(Invitacion $invitacion): self
+    {
+        if ($this->invitacions->removeElement($invitacion)) {
+            // set the owning side to null (unless already changed)
+            if ($invitacion->getUser() === $this) {
+                $invitacion->setUser(null);
+            }
+        }
 
         return $this;
     }

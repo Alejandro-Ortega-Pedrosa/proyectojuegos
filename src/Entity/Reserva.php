@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ReservaRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ReservaRepository::class)]
@@ -14,14 +13,14 @@ class Reserva
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $fecha = null;
+    #[ORM\Column(length: 50)]
+    private ?string $fecha = null;
 
     #[ORM\Column]
     private ?bool $presentado = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $fechacancelacion = null;
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $fechacancelacion = null;
 
     #[ORM\ManyToOne(inversedBy: 'reserva')]
     #[ORM\JoinColumn(nullable: false)]
@@ -31,17 +30,26 @@ class Reserva
     #[ORM\JoinColumn(nullable: false)]
     private ?Juego $juego = null;
 
+    #[ORM\ManyToOne(inversedBy: 'reservas')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Tramo $tramo = null;
+
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getFecha(): ?\DateTimeInterface
+    public function getFecha(): ?string
     {
         return $this->fecha;
     }
 
-    public function setFecha(\DateTimeInterface $fecha): self
+    public function setFecha(string $fecha): self
     {
         $this->fecha = $fecha;
 
@@ -60,12 +68,12 @@ class Reserva
         return $this;
     }
 
-    public function getFechacancelacion(): ?\DateTimeInterface
+    public function getFechacancelacion(): ?string
     {
         return $this->fechacancelacion;
     }
 
-    public function setFechacancelacion(?\DateTimeInterface $fechacancelacion): self
+    public function setFechacancelacion(?string $fechacancelacion): self
     {
         $this->fechacancelacion = $fechacancelacion;
 
@@ -95,4 +103,30 @@ class Reserva
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTramo(): ?Tramo
+    {
+        return $this->tramo;
+    }
+
+    public function setTramo(?Tramo $tramo): self
+    {
+        $this->tramo = $tramo;
+
+        return $this;
+    }
+
+
 }
