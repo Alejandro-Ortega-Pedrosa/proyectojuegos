@@ -1,0 +1,228 @@
+$primary: #EB1616;
+$secondary: #191C24;
+
+.bg-white{
+    background-color: white;
+}
+
+.text-white{
+    color: white
+}
+
+form ul{
+    list-style: none;
+    color: #EB1616;
+    font-size: 14px;
+    padding: 0;
+}
+
+.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/*CAMBIA LAS PROPIEDADES DE LOS ELEMENTOS DE DATE TABLE*/
+.dataTables_filter input{
+    color: white;
+}
+
+#idtabla_length select{
+    color: white;
+}
+
+/*PARA COLUMNAS IMPARES DE LAS TABLAS*/
+tr:nth-child(even){
+    background-color: rgb(182, 182, 182);
+}
+
+  
+/* BARRA DE SCROLL */
+::-webkit-scrollbar{
+    width: 20px;
+
+    &-track{
+        box-shadow: inset 0 0 5px grey; 
+        border-radius: 5px;
+    }
+
+    &-thumb {
+        background: red; 
+        border-radius: 5px;
+    }
+
+    &-thumb:hover {
+        background: #b30000; 
+    }
+}
+
+/*ANIMACION CABECERA*/   
+.up-header:hover{
+    transform: translateY(-5px);
+}
+
+/*EVENTOS*/
+.pasado{
+    border: 5px solid red;
+}
+
+.activo{
+    border: 5px solid green;
+}
+
+/*CAMBIA LA POSICION DEL DIALOG*/
+.ui-dialog{
+    position: fixed !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: white;
+    box-shadow: 15px 5px 10px #48529944;
+
+    &-titlebar{
+        background-color: #191C24;
+
+        &-close{
+            background-image: url("../img/cerrar.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+    }
+}
+
+
+
+/* RESERVAS */
+.contenedor{
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.formulario{
+    height: 600px;
+    width: 500px;
+}
+
+.sala{
+    background-image: url("../img/sala.jpg");
+    height: 600px;
+    width: 900px;
+}
+
+/* GESTION MESAS */
+.almacen{
+    height: 600px;
+    width: 400px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    overflow: scroll;
+}
+
+.mesa{
+    background-color: maroon;
+}
+
+.gestion{
+    margin-top: 15%;
+    margin-bottom: 15%;
+    width: 200px;
+
+    &-btn{
+        margin-left: 18%;
+    }
+}
+
+/*PAPELERA PARA BORRAR MESAS*/
+.papelera{
+    background-image: url("../img/papelera-de-reciclaje-cerrada.png");
+    background-size: 200px;
+    margin-top: 35px;
+    width: 200px;
+    height: 200px;
+
+    &-abierta{
+        background-image: url("../img/papelera-de-reciclaje.png");
+    }
+}
+
+.t-move {
+    animation-duration: 3s;
+    animation-name: slidein;
+  }
+  
+  @keyframes slidein {
+    from {
+      margin-left: 100%;
+      width: 300%
+    }
+  
+    to {
+      margin-left: 0%;
+      width: 100%;
+    }
+  }
+
+.btn-video{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 820px;
+}
+
+.diagonal-gradient {
+    background: linear-gradient(to bottom right, $secondary 70%, $primary);
+  }
+
+
+/*PAGINACION*/
+.pagination a{
+    color: white;
+}
+
+.pagination{
+    margin-bottom: 20px;
+}
+
+.first{
+    background-color: #EB1616;
+    color: white;
+    padding: 5px 5px;
+    border: 1px solid #191C24;
+}
+
+.previous{
+    background-color: #EB1616;
+    color: white;
+    padding: 5px 5px;
+    border: 1px solid #191C24;
+}
+
+.page{
+    background-color: #EB1616;
+    color: white;
+    padding: 5px 5px;
+    border: 1px solid #191C24;
+}
+
+.current{
+    background-color: white;
+    color: #EB1616;
+    padding: 5px 5px;
+    border: 1px solid #191C24;
+}
+
+.next{
+    background-color: #EB1616;
+    color: white;
+    padding: 5px 5px;
+    border: 1px solid #191C24;
+}
+
+.last{
+    background-color: #EB1616;
+    color: white;
+    padding: 5px 5px;
+    border: 1px solid #191C24;
+}

@@ -10,6 +10,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class EventoType extends AbstractType
 {
@@ -21,8 +23,37 @@ class EventoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nombre')
-            ->add('fecha')
+            ->add('nombre', null, [
+
+                    'required'=> false, 
+                    
+                    'constraints' => [
+                        new NotBlank([
+                            'message' => 'Porfavor, inserte un nombre para el evento',
+                        ]),
+                        new Length([
+                            'min' => 1,
+                            'minMessage' => 'Tu nombre debe de tener minimo {{ limit }} caracteres',
+                            'max' => 50,
+                        ]),
+                ]
+            ])
+
+            ->add('fecha', null, [
+
+                'required'=> false, 
+                
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Porfavor, inserte una fecha para el evento',
+                    ]),
+                    new Length([
+                        'min' => 10,
+                        'minMessage' => 'La fecha debe de tener minimo {{ limit }} caracteres (YYYY-MM-DD)',
+                        'max' => 10,
+                    ]),
+                ]
+            ])
             ->add('juego',  EntityType::class, [
                 'class' => Juego::class, 
                 'choices' => $this->doctrine->getRepository(Juego::class)->findAll(),

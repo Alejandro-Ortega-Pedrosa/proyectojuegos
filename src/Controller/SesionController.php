@@ -2,10 +2,8 @@
 
     namespace App\Controller;
 
-    use App\Entity\User;
     use Doctrine\Persistence\ManagerRegistry;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-    use Symfony\Component\HttpFoundation\Response;
     use Symfony\Component\Routing\Annotation\Route;
 
     class SesionController extends AbstractController
@@ -16,11 +14,14 @@
         
         }
 
+        //CIERRA SESION
         #[Route('/logout', name: 'app_logout', methods: 'GET')]
         public function logout(){
             throw new \Exception('Cierra Sesion');
         }
 
+        /*
+        //SE CAMBIA EL ROL DEL USUARIO ACTUAL A ADMIN
         #[Route('/setAdmin/{id}', name: 'app_setAdmin')]
         public function admin(int $id):Response
         {
@@ -33,6 +34,6 @@
             $entityManager->flush();
 
             return $this->render('landingPage.html.twig');
-        }
+        }*/
 
     }

@@ -31,7 +31,7 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+            //CODIFICA LA CONTRASEÑA
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -53,7 +53,7 @@ class RegistrationController extends AbstractController
         //BUSCA TODOS LOS JUEGOS DE LA BD
          $juegos = $this->doctrine
          ->getRepository(Juego::class)
-         ->findAll();
+         ->findBy(array(),array(),4);
 
         return $this->render('landingPage.html.twig', [
             'registrationForm' => $form->createView(),

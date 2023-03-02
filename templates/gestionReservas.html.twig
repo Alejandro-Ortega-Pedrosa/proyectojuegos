@@ -8,44 +8,51 @@
 
 {% block stylesheets %}
     {{parent()}}
-
-    <style>
-        .contenedor{
-            position: relative;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-        .formulario{
-            background-color: gray;
-            height: 600px;
-            width: 400px;
-            justify-content: space-around;
-        }
-        .sala{
-            background-color: red;
-            height: 600px;
-            width: 900px;
-        }
-        .mesa{
-            background-image: url("img/mesas.jpg");
-        }
- 
-    </style>
 {% endblock %}
 
 {% block body %}
     {{parent()}}
      
     <div class="contenedor">
-        <div class="formulario" id="almacen">
+        <div class="formulario p-5" id="almacen">
+        <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
+            <h1 class="text-uppercase">HAZ TU RESERVA</h1>
+        </div>
             <form>
-                <label>Fecha de reserva</label>
-                <input type="text" id="desde">
-                <label>Juego</label>
-                <select id="juego"></select>
-                <button id="reservar">Reservar</button>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <select class="form-control bg-transparent" id="tramo"></select>
+                            <label>Tramo Horario <i class="fa fa-clock-o"></i></label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <input class="form-control bg-transparent" type="text" id="desde">
+                            <label>Fecha de reserva <i class="fas fa-calendar"></i></label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <select class="form-control bg-transparent" id="juego"></select>
+                            <label>Juego <i class="fa fa fa-arrow-down"></i></label>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div>
+                            <label class="text-primary" id="mimesa">NO HAY NINGUNA MESA SELECCIONADA</label>
+                        </div>
+                    </div>
+
+                
+                    <button class="btn btn-primary w-100 py-3" id="reservar">Reservar</button>
+                   
+                </div>
             </form>
+            <div class="text-center">
+                <a class="text-white" href="/video"><u>¿Como hacer tu reserva?, Pincha aquí para verlo!!!</u></a>
+            </div>
         </div>
         <div class="sala" id="sala"></div>
     </div>

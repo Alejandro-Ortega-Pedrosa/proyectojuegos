@@ -32,13 +32,14 @@
 
     <!--MIS CSS-->
     <link href="{{ asset('css/jquery-ui.css') }}" type="text/css" rel="stylesheet" />
+    <link href="{{ asset('scss/miBootstrap.css')}}" rel="stylesheet">
 
     <link href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block header %}
     <!--HEADER -->
-    <nav class="navbar navbar-expand-lg bg-secondary navbar-dark sticky-top py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
+    <nav class="diagonal-gradient navbar navbar-expand-lg bg-secondary navbar-dark sticky-top py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
         <a href="/" class="navbar-brand ms-4 ms-lg-0">
             <h1 class="mb-0 text-primary text-uppercase"></i>XOKAS Y CIA</h1>
         </a>
@@ -56,19 +57,27 @@
         {% if app.user != null %}
             {% if app.user.roles[0]=="ROLE_USER"%}
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <a href="gestionReservas" class="nav-item nav-link">Reserva</a>
-                    <a href="eventos" class="nav-item nav-link">Eventos</a>
+                    <a href="/gestionReservas" class="nav-item nav-link up-header">Reserva</a>
+                    <a href="/eventos" class="nav-item nav-link up-header">Eventos</a>
                 </div>
             {% endif %}
             {% if app.user.roles[0]=="ROLE_ADMIN"%}
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <a href="/eventos" class="nav-item nav-link">Eventos</a>
-                    <a href="gestionMesas" class="nav-item nav-link">Mesas</a>
-                    <a href="gestionJuegosTabla" class="nav-item nav-link">Juegos</a>
-                    <a href="admin" class="nav-item nav-link">Easy Admin</a>
-               
+                    <a href="/gestionEventosTabla" class="nav-item nav-link up-header">Eventos</a>
+                    <a href="/gestionMesas" class="nav-item nav-link up-header">Mesas</a>
+                    <a href="/gestionJuegosTabla" class="nav-item nav-link up-header">Juegos</a>
+                    <a href="/admin" class="nav-item nav-link up-header">Easy Admin</a>               
             {% endif %}
-                    <a href="logout" class="nav-item nav-link active">LOGOUT</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{app.user.nombre}}</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="/userEditForm" class="dropdown-item">Mi Perfil</a>
+                            {% if app.user.roles[0]=="ROLE_USER"%}
+                                <a href="/gestionMisReservas" class="dropdown-item">Mis Reservas</a>
+                            {% endif %}
+                            <a href="/logout" class="dropdown-item">Cerrar Sesión</a>
+                        </div>
+                    </div>
                 </div>
         {% endif %}
 

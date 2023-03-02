@@ -10,41 +10,36 @@
     {{parent()}}
 
     <style>
-        .contenedor{
-            position: relative;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-        .almacen{
-            background-color: gray;
-            height: 600px;
-            width: 400px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            overflow: scroll;
-        }
-        .sala{
-            background-color: red;
-            height: 600px;
-            width: 900px;
-        }
-        .mesa{
-            background-image: url("img/mesas.jpg");
-        }
+        
  
     </style>
 {% endblock %}
 
 {% block body %}
     {{parent()}}
-     
-    <label>Seleccione una fecha</label>
-    <input type="text" id="desde">
+    
     <div class="contenedor">
-        <div class="almacen" id="almacen"></div>
-        <button id="btn">+</button>
+        <div class="almacen bg-secondary" id="almacen"></div>
+        <div class="gestion">
+            <div class="row g-3">
+                <div class="col-12">
+                    <div class="form-floating">
+                        <input class="form-control bg-transparent" type="text" id="desde">
+                        <label>Seleccione una fecha</label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating">
+                        <button class="btn btn-primary text-uppercase gestion-btn" id="boton">Nueva Mesa</button>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="papelera" id="papelera">
+
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="sala" id="sala"></div>
     </div>
 {% endblock %}

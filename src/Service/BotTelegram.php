@@ -54,15 +54,17 @@ class BotTelegram
         return $urlstart.$token.$urlend;
     }
 
-    public function main()
+    public function main(string $evento)
     {
         $chatid = $this->getChatid();
         $content = array (
             'headers' => array("Content-Type" => "application/x-www-form-urlencoded"),
-            "body"  => array("chat_id" => $chatid, "text" => "Este es un mensaje para Sysadm"),
+            "body"  => array("chat_id" => $chatid, "text" => "Has sido invitado al evento ".$evento),
         );
+       
         $url = $this->getFullurl();
         $httpClient = HttpClient::create();
+        
         try {
             $response = $httpClient->request('GET', $url, $content);
             $content = $response->getContent();
@@ -71,6 +73,7 @@ class BotTelegram
         catch (\Exception $e) {
             $this->logger->critical($e);
         }
+        
         return $content;
     }
 }

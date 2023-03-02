@@ -11,7 +11,7 @@
     use Symfony\Component\Routing\Annotation\Route;
     use Symfony\Component\String\Slugger\SluggerInterface;
     use Knp\Component\Pager\PaginatorInterface;
-
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
     class juegoController extends AbstractController{
 
@@ -21,22 +21,26 @@
         }
        
         //FORMULARIO PARA CREAR UN JUEGO NUEVO
+        #[IsGranted('ROLE_ADMIN')] 
         #[Route('/gestionJuegosForm', name: 'gestionJuegosForm')] 
         public function gestionJuegosForm(Request $request,  EntityManagerInterface $em, SluggerInterface $slugger):Response{
 
-            //FORMULARIO
+            //SE CREA EL NUEVO JUEGO
             $juego = new Juego();
     
+            //SE CREA EL FORM
             $form = $this->createForm(JuegoType::class, $juego);
     
             $form->handleRequest($request);
 
+            //CUANDO EL FORMULARIO ESTA ENVIADO
             if ($form->isSubmitted() && $form->isValid()) {
 
                 $juego = $form->getData();
 
                 $foto = $form->get('foto')->getData();
 
+                //SI TIENE FOTO GUARDA EL NOMBRE DEL ARCHIVO
                 if ($foto) {
                     
                     $originalFilename = pathinfo($foto->getClientOriginalName(), PATHINFO_FILENAME);
@@ -53,24 +57,28 @@
                     $juego->setFoto($newFilename);
                 }
 
-
+                //GUARDA EL JUEGO EN LA BD
                 $em->persist($juego);
                 $em->flush();
+                
             }
 
-        
+            //DEVUELVE LA PLANTILLA CON EL FORMULARIO
             return $this->render('gestionJuegosForm.html.twig',['form' => $form]);
 
         }
 
-
+        //FORMULARIO PARA EDITAR UN JUEGO SEGUN SU ID
+        #[IsGranted('ROLE_ADMIN')] 
         #[Route('/gestionJuegosEditForm/{id}', name: 'gestionJuegosEditForm')] 
         public function gestionJuegosEditForm(int $id, Request $request, SluggerInterface $slugger, EntityManagerInterface $em):Response{
 
+            //BUSCA EL JUEGO POR SU ID EN LA BD
             $juego = $this->doctrine
             ->getRepository(Juego::class)
             ->find($id);
 
+            //CREA EL FORM
             $form=$this->createForm(JuegoType::class, $juego, ['method' => 'POST']);
 
             $form->handleRequest($request);
@@ -82,6 +90,7 @@
 
                 $foto = $form->get('foto')->getData();
 
+                //SI TIENE FOTO SE GUARDA EL NOMBRE DEL ARCHIVO
                 if ($foto) {
                     
                     $originalFilename = pathinfo($foto->getClientOriginalName(), PATHINFO_FILENAME);
@@ -98,37 +107,41 @@
                     $juego->setFoto($newFilename);
                 }
 
-
+                //SE GUARDA EL JUEGO EN LA BD
                 $em->persist($juego);
                 $em->flush();
 
+                //SE PINTA LA TABLA DE JUEGOS
                 return $this->redirect($this->generateUrl('gestionJuegosTabla'));
             }
 
 
  
-            //DEVUELVE EL FORMULARIO RELLENO
+            //DEVUELVE LA PLANTILLA CON EL FORMULARIO RELLENO
             return $this->render('gestionJuegosEditForm.html.twig', ['form' => $form, 'juego' => $juego]);
 
         }
 
+        //SE BORRA UN JUEGO SEGUN SU ID
+        #[IsGranted('ROLE_ADMIN')] 
         #[Route('/gestionJuegosDelete/{id}', name: 'gestionJuegosDelete')] 
         public function gestionJuegosDelete(int $id):Response{
 
             $entityManager = $this->doctrine->getManager();
-            //BUSCA LA MESA EN LA BASE DE DATOS
+            //BUSCA EL JUEGO EN LA BASE DE DATOS
             $juego = $entityManager->getRepository(Juego::class)->find($id);
     
-            //BORRA LA MESA DE LA BASE DE DATOS
+            //BORRA EL JUEGO DE LA BASE DE DATOS
             $entityManager->remove($juego);
             $entityManager->flush();
  
-            //DEVUELVE EL FORMULARIO RELLENO
+            //DEVUELVE LA PLANTILLA CON EL FORMULARIO RELLENO
             return $this->redirect($this->generateUrl('gestionJuegosTabla'));
 
         }
 
         //TABLA DE JUEGOS
+        #[IsGranted('ROLE_ADMIN')] 
         #[Route('/gestionJuegosTabla', name: 'gestionJuegosTabla')] 
         public function gestionJuegosTabla(Request $request, PaginatorInterface $paginator):Response{
     
@@ -137,13 +150,12 @@
                 ->getRepository(Juego::class)
                 ->findAll();
                
-            // Paginate the results of the query
+            //PAGINA LOS RESULTADOS DE LA RESPUESTA
             $juegos = $paginator->paginate(
-            // Doctrine Query, not results
             $juegos,
-            // Define the page parameter
+            //DEFINE LOS PARAMETROS
             $request->query->getInt('page', 1),
-            // Items per page
+            //JUEGOS POR PAGINA
             5
             );
                    

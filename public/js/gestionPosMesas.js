@@ -44,7 +44,7 @@ $(function(){
                 fechaSeleccionada=(year+'-0'+month+'-'+day);
             }
 
-            $.ajax( "http://localhost:8000/api/distribucion", 
+            $.ajax( "http://localhost:8000/api/distribucion/"+fechaSeleccionada, 
             {
                 method:"GET",
                 dataType:"json"
@@ -59,14 +59,15 @@ $(function(){
 
                 //RECORRO LA DISPOSICION SEGUN EL DIA SELECCIONADO Y PINTA LAS MESAS EN SU NUEVA POSICION
                 $.each(data, function(i,v){
-                    if(fechaSeleccionada===data[i].fecha){
-                        var id=data[i].mesa;
+                    var id=data[i].mesa;
 
-                        mesa=$('#'+id);
-                        mesa.attr('name', data[i].id);
-                        mesa.css({top:(data[i].y-difY)+"px",left:(data[i].x-difX)+"px"});
-                        $("#sala").append(mesa);
-                    }
+                    var difY=$("#sala").offset().top;
+                        
+                    mesa=$('#'+id);
+                    mesa.attr('name', data[i].id);
+                    mesa.css({position:"absolute",top:(data[i].y-difY)+"px",left:(data[i].x)+"px"});
+                    $("#sala").append(mesa);
+                    
                 })
 
             })
@@ -96,7 +97,7 @@ $(function(){
             },
             revert: true,
             helper:'clone',
-            accept: '#almacen, #sala',
+            accept: '#almacen, #sala, #papelera',
             revertDuration: 0,
         });
             
@@ -140,13 +141,15 @@ $(function(){
                         
                         //COMPRUEBO SI YA TIENE DISTRIBUCION Y SI TIENE HAGO UN PUT SI NO UN POST 
                         if(mesa.attr("name")!=null){
-
+                            //SE HACE EL PUT DE LA DISTRIBUCION
                             guardaMesaDistribucion(fechaSeleccionada, mesa.offset().top, mesa.offset().left, mesa);
                         }else{
+                            //SE HACE EL POST DE LA DISTRIBUCION
                             guardaMesaNuevaDistribucion(fechaSeleccionada, mesa.offset().top, mesa.offset().left, mesa);
                         }
                         
                     }else{
+                        //GUARDA LA BASE 
                         guardaMesa(mesa, mesa.offset().top, mesa.offset().left);
                     }
 
@@ -165,9 +168,31 @@ $(function(){
                 $(this).append(mesa);
                 if(fechaSeleccionada!=null){
                     borraDistribucion(mesa);
+                    mesa.attr('name',null);
                 }else{
                     guardaMesa(mesa, 0, 0);
                 }
+
+            }
+        })
+
+         //PAPELERA
+         $(".papelera").droppable({
+
+            classes: {
+                "ui-droppable-hover": "papelera-abierta"
+            },
+
+            drop: function(ev, ui){
+
+                
+                $(".papelera").css({"background-image": 'url("img/papelera-de-reciclaje.png")'});
+
+                //GUARDA LA MESA ARRASTRADA
+                var mesa=ui.draggable;
+               
+                //LLAMA A LA FUNCION DE BORRADO DE UNA MESA
+                deleteMesa(mesa);
 
             }
         })
@@ -193,9 +218,10 @@ $(function(){
                 jqPlantilla.find("button").text("Guardar");
 
                 jqPlantilla.dialog({
-                    height: 300,
+                    height: 350,
                     width: 350,
                     modal: true,
+                    draggable: false,
                 });
 
                 //FORMULARIO DE CREACION DE UNA NUEVA MESA
@@ -207,19 +233,39 @@ $(function(){
                     var y=0;
                     var x=0;
 
-                    $.ajax( "http://localhost:8000/api/mesa/"+id, 
-                    {
-                        method:"PUT",
-                        dataType:"json",
-                        data:{
-                            width: width,
-                            height: height,
-                            y: y,
-                            x: x
+                    if (form!=null){
+
+                        const mensajesError = [];
+                        //COMPRUEBA EL HEIGHT
+                        if($(".height").val() === null || $(".height").val()===""){
+                            $(".heightlabel").css({"display": "block"});
+                            mensajesError.push("Error");
                         }
-                    }).done(function(data){
-                        "SE HAN ENVIADO LOS DATOS";
-                    })
+                        //COMPRUEBA LOS WIDTH
+                        if($(".width").val() === null || $(".width").val()===""){
+                            $(".widthlabel").css({"display": "block"});
+                            mensajesError.push("Error");
+                        }
+                        if(mensajesError.length>0){
+                            ev.preventDefault();
+                        }else{
+                            //SI NO HAY MENSAJES DE ERROR MANDA LOS DATOS
+                            $.ajax( "http://localhost:8000/api/mesa/"+id, 
+                            {
+                                method:"PUT",
+                                dataType:"json",
+                                data:{
+                                    width: width,
+                                    height: height,
+                                    y: y,
+                                    x: x
+                                }
+                            }).done(function(data){
+                                "SE HAN ENVIADO LOS DATOS";
+                            })
+                        }
+                        
+                    }
                 });
 
             }).fail(function(){
@@ -237,7 +283,7 @@ $(function(){
     
 
     //MODAL DEL FORMULARIO PARA CREAR UNA MESA
-    $("button").click(function(ev){
+    $("#boton").click(function(ev){
 
         ev.preventDefault();
 
@@ -247,18 +293,44 @@ $(function(){
         //CARACTERISTICAS DEL MODAL
         var jqPlantilla=$(plantilla);
         jqPlantilla.dialog({
-            height: 300,
+            height: 350,
             width: 350,
             modal: true,
+            draggable: false,
         });
 
-        //FORMULARIO DE CREACION DE UNA NUEVA MESA
-        $("form[name='gesMesa']").submit(function(ev){
-            var form=$(this);
-            var height=form.find("#height").val();
-            var width=form.find("#width").val();
+        var formulario=$("form[name='gesMesa']")
 
-            nuevaMesa(height, width);
+        //FORMULARIO DE CREACION DE UNA NUEVA MESA
+        formulario.submit(function(ev){
+
+            //VALIDACION DEL FORMULARIO
+            if (formulario!=null){
+                  
+                const mensajesError = [];
+                //COMPRUEBA EL HEIGHT
+                if($(".height").val() === null || $(".height").val()===""){
+                    $(".heightlabel").css({"display": "block"});
+                    mensajesError.push("Error");
+                }
+                //COMPRUEBA LOS WIDTH
+                if($(".width").val() === null || $(".width").val()===""){
+                    $(".widthlabel").css({"display": "block"});
+                    mensajesError.push("Error");
+                }
+                if(mensajesError.length>0){
+                    ev.preventDefault();
+                }else{
+                    //SI NO HAY MENSAJES DE ERROR MANDA LOS DATOS
+                    var form=$(this);
+                    var height=form.find("#height").val();
+                    var width=form.find("#width").val();
+        
+                    nuevaMesa(height, width);
+                }
+                
+            }
+            
         });
     })
 
@@ -286,7 +358,47 @@ function guardaMesa(mesa, y, x){
 
 }
 
-//FUNCION PARA GUARDAR UNA MESA
+//FUNCION PARA BORRAR UNA MESA
+function deleteMesa(mesa){
+    $.ajax( "http://localhost:8000/api/mesa/"+mesa.attr("id"), 
+    {
+        method:"DELETE",
+        
+    }).done(function(data){
+
+        mesa.remove();
+
+        $(".papelera").css({"background-image": 'url("img/papelera-de-reciclaje-cerrada.png")'});
+
+        console.log("SE HAN ENVIADO LOS DATOS");
+
+    }).fail(function(){
+
+        $(".papelera").css({"background-image": 'url("img/papelera-de-reciclaje-cerrada.png")'});
+         
+        //PLANTILLA DE ERROR 
+        var plantilla=pintaPlantillaDelete();
+    
+        //CARACTERISTICAS DEL MODAL
+        var jqPlantilla=$(plantilla);
+
+        jqPlantilla.dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            draggable: false,
+            buttons: {
+                Cancel: function() {
+                  $( this ).dialog( "close" );
+                }
+            }
+        });
+    })
+
+}
+
+//FUNCION PARA EDITAR UNA DISTRIBUCION DE UNA MESA
 function guardaMesaDistribucion(fechaSeleccionada, y, x, mesa){
     $.ajax( "http://localhost:8000/api/distribucion/"+mesa.attr("name"), 
     {
@@ -308,7 +420,7 @@ function guardaMesaDistribucion(fechaSeleccionada, y, x, mesa){
 
 }
 
-//FUNCION PARA GUARDAR UNA MESA
+//FUNCION PARA UNA NUEVA DISTRIBUCION DE UNA MESA
 function guardaMesaNuevaDistribucion(fechaSeleccionada, y, x, mesa){
     $.ajax( "http://localhost:8000/api/distribucion", 
     {
@@ -330,6 +442,7 @@ function guardaMesaNuevaDistribucion(fechaSeleccionada, y, x, mesa){
 
 }
 
+//FUNCION PARA BORRAR UNA DISTRIBUCION
 function borraDistribucion(mesa){
     $.ajax( "http://localhost:8000/api/distribucion/"+mesa.attr('name'), 
     {
@@ -373,14 +486,20 @@ function pintaPlantilla(){
             <div class="row g-3">
                 <div class="col-12">
                     <div class="form-floating">
-                        <input class="form-control bg-transparent" name="height" id="height" type="text">
+                        <input class="height form-control bg-transparent" name="height" id="height" type="text">
                         <label>Height:</label>
+                        <div class="heightlabel text-primary" style="display:none">
+                            <label>Porfavor, inserte un height para la mesa</label>
+                        </div>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-floating">
-                        <input class="form-control bg-transparent" name="width" id="width" type="text">
+                        <input name="width" class="form-control bg-transparent" name="width" id="width" type="text">
                         <label>Width:</label>
+                        <div class="widthlabel text-primary"style="display:none">
+                            <label>Porfavor, inserte un width para la mesa</label>
+                        </div>
                     </div>
                 </div>
                 <div class="col-12">
@@ -391,4 +510,20 @@ function pintaPlantilla(){
 
     return plantilla;
 }
+
+//FUNCION PARA LA PLANTILLA DEL FORMULARIO DEL MODAL
+function pintaPlantillaDelete(){
+    
+    var plantilla=`
+        <form name="gesMesa">
+            <div class="row g-3">
+                <div class="col-12">
+                    <label>Lo sentimos, esta mesa solo se puede eliminar con Easy Admin</label>
+                </div>
+            </div>
+        </form>`
+
+    return plantilla;
+}
+
 

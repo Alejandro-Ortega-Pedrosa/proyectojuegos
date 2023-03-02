@@ -1,6 +1,6 @@
 <?php
  
-    namespace App\Controller;
+    namespace App\Controller\Api;
 
     use App\Entity\Distribucion;
     use App\Entity\Mesa;
@@ -10,6 +10,7 @@
     use Doctrine\Persistence\ManagerRegistry;
     use Symfony\Component\HttpFoundation\Request;
 
+    
 #[Route(path:'/api', name:'api_')]
 class apiDistribucion extends AbstractController
 {
@@ -20,13 +21,13 @@ class apiDistribucion extends AbstractController
     }
 
     //DEVUELVE UN JSON CON TODAS LAS DISTRIBUCIONES
-    #[Route(path:'/distribucion', name:'distribucion', methods:'GET')]
-    public function mesasFecha(): Response
+    #[Route(path:'/distribucion/{fecha}', name:'distribucion', methods:'GET')]
+    public function mesasFecha(string $fecha): Response
     {
         //BUSCA TODAS LAS DISTRIBUCIONES DE LA BD
         $distribuciones = $this->doctrine
             ->getRepository(Distribucion::class)
-            ->findAll();
+            ->findBy(array('fecha'=>$fecha));
  
         $data = [];
  
@@ -37,7 +38,9 @@ class apiDistribucion extends AbstractController
                 'fecha' => $distribucion->getFecha(),
                 'x' => $distribucion->getX(),
                 'y' => $distribucion->getY(),
-                'mesa' => $distribucion->getMesa()->getId()
+                'mesa' => $distribucion->getMesa()->getId(),
+                'height' => $distribucion->getMesa()->getHeight(),
+                'width' => $distribucion->getMesa()->getWidth()
            ];
         }
  
@@ -46,7 +49,7 @@ class apiDistribucion extends AbstractController
     }
 
     
-     //CREA UNA NUEVA DISPOSICION SEGUN LOS DATOS PASADOS POR POST
+     //CREA UNA NUEVA DISTRIBUCION SEGUN LOS DATOS PASADOS POR POST
      #[Route(path:'/distribucion', name:"distribucion_new", methods:'POST')]
      public function new(Request $request): Response
      {
@@ -54,11 +57,9 @@ class apiDistribucion extends AbstractController
          $entityManager = $this->doctrine->getManager();
          
         //BUSCO LA MESA EN LA BD SEGUN SU ID
-        $idMesa=$request->request->get('idmesa');
-
         $mesa = $this->doctrine
          ->getRepository(Mesa::class)
-         ->find($idMesa);
+         ->find($request->request->get('idmesa'));
  
          //CREO LA NUEVA DISTRIBUCION CON LAS PROPIEDADES 
          $distribucion = new Distribucion();
@@ -78,58 +79,57 @@ class apiDistribucion extends AbstractController
      public function edit(Request $request, int $id): Response
      {
          $entityManager = $this->doctrine->getManager();
-         //BUSCA LA MESA EN LA BASE DE DATOS
+         
+         //BUSCA LA DISTRIBUCION EN LA BASE DE DATOS
          $distribucion = $entityManager->getRepository(Distribucion::class)->find($id);
   
-         //SI NO ENCUENTRA LA MESA DEVUELVE EL MENSAJE DE ERROR
+         //SI NO ENCUENTRA LA DITRIBUCION DEVUELVE EL MENSAJE DE ERROR
          if (!$distribucion) {
              return $this->json('No project found for id ' . $id, 404);
          }
 
         //BUSCO LA MESA EN LA BD SEGUN SU ID
-        $idMesa=$request->request->get('idmesa');
-
         $mesa = $this->doctrine
          ->getRepository(Mesa::class)
-         ->find($idMesa);
+         ->find($request->request->get('idmesa'));
   
 
         //CREO LA NUEVA DISTRIBUCION CON LAS PROPIEDADES
-        $distribucion = new Distribucion();
         $distribucion->setFecha($request->request->get('fecha'));
         $distribucion->setX($request->request->get('x'));
         $distribucion->setY($request->request->get('y'));
         $distribucion->setMesa($mesa);
       
+        $entityManager->persist($distribucion);
         $entityManager->flush();
   
-        //CREA EL ARRAY CON LOS DATOS DE LA MESA
+        //CREA EL ARRAY CON LOS DATOS DE LA DISTRIBUCION
         $data =  [
             'id' => $distribucion->getId(),
             'fecha' => $distribucion->getFecha(),
             'x' => $distribucion->getX(),
             'y' => $distribucion->getY(),
-            'mesa' => $distribucion->getMesa()->getId()
+            'mesa' => $distribucion->getMesa()->getId(),
         ];
           
-        //DEVUELVE EL JSON CON LOS DATOS DE ESA MESA
+        //DEVUELVE EL JSON CON LOS DATOS DE ESA DISTRIBUCION
         return $this->json($data);
     }
 
-    //BORRA UNA MESA DE LA BASE DE DATOS SEGUN SU ID
+    //BORRA UNA DISTRIBUCION DE LA BASE DE DATOS SEGUN SU ID
     #[Route(path:'/distribucion/{id}', name:"distribucion_delete", methods:'DELETE')]
     public function delete(int $id): Response
     {
         $entityManager = $this->doctrine->getManager();
-        //BUSCA LA MESA EN LA BASE DE DATOS
+        //BUSCA LA DISTRIBUCION EN LA BASE DE DATOS
         $distribucion = $entityManager->getRepository(Distribucion::class)->find($id);
  
-        //SI NO ENCUENTRA LA MESA DEVUELVE EL MENSAJE DE ERROR
+        //SI NO ENCUENTRA LA DISTRIBUCION DEVUELVE EL MENSAJE DE ERROR
         if (!$distribucion) {
             return $this->json('No project found for id' . $id, 404);
         }
  
-        //BORRA LA MESA DE LA BASE DE DATOS
+        //BORRA LA DISTRIBUCION DE LA BASE DE DATOS
         $entityManager->remove($distribucion);
         $entityManager->flush();
  

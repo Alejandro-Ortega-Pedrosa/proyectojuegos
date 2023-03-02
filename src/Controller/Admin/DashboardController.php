@@ -6,6 +6,7 @@ use App\Entity\Evento;
 use App\Entity\Juego;
 use App\Entity\Mesa;
 use App\Entity\Reserva;
+use App\Entity\Tramo;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -54,6 +55,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Mesa', 'fa fa-stop', Mesa::class),
             MenuItem::linkToCrud('Reserva', 'fa fa-book', Reserva::class),
             MenuItem::linkToCrud('Evento', 'fa fa-calendar', Evento::class),
+            MenuItem::linkToCrud('Tramo', 'fa fa-clock-o', Tramo::class),
         ];
     }
 }

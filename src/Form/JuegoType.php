@@ -8,17 +8,94 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class JuegoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nombre',null, ['attr' => ['class' => 'form-control bg-transparent']])
-            ->add('width',null, ['attr' => ['class' => 'form-control bg-transparent']])
-            ->add('height',null, ['attr' => ['class' => 'form-control bg-transparent']])
-            ->add('numminimo',null, ['attr' => ['class' => 'form-control bg-transparent']])
-            ->add('nummaximo',null, ['attr' => ['class' => 'form-control bg-transparent']])
+            ->add('nombre', null, [
+
+                'required'=> false, 
+                
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Porfavor, inserte un nombre para el juego',
+                    ]),
+                    new Length([
+                        'min' => 5,
+                        'minMessage' => 'El nombre debe de tener minimo {{ limit }} caracteres',
+                        'max' => 100,
+                    ]),
+                ]
+            ])
+
+            ->add('width', null, [
+
+                'required'=> false, 
+                
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Porfavor, inserte un width para el juego',
+                    ]),
+                    new Length([
+                        'min' => 1,
+                        'minMessage' => 'El width debe de tener minimo {{ limit }} caracteres',
+                        'max' => 10,
+                    ]),
+                ]
+            ])
+
+            ->add('height', null, [
+
+                'required'=> false, 
+                
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Porfavor, inserte un height para el juego',
+                    ]),
+                    new Length([
+                        'min' => 1,
+                        'minMessage' => 'El height debe de tener minimo {{ limit }} caracteres',
+                        'max' => 10,
+                    ]),
+                ]
+            ])
+
+            ->add('numminimo', null, [
+
+                'required'=> false, 
+                
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Porfavor, inserte un número mínimo de jugadores',
+                    ]),
+                    new Length([
+                        'min' => 1,
+                        'minMessage' => 'El número mínimo debe de tener minimo {{ limit }} caracteres',
+                        'max' => 10,
+                    ]),
+                ]
+            ])
+
+            ->add('nummaximo', null, [
+
+                'required'=> false, 
+                
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Porfavor, inserte un número máximo de jugadores',
+                    ]),
+                    new Length([
+                        'min' => 1,
+                        'minMessage' => 'El número máximo debe de tener minimo {{ limit }} caracteres',
+                        'max' => 10,
+                    ]),
+                ]
+            ])
+
             ->add('foto', FileType::class, [
                 'label' => 'Foto (.jpg .png)',
 

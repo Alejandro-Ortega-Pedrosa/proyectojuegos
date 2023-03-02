@@ -7,7 +7,6 @@
 
 class pdf extends AbstractController
 {
-    private $client;
     
     public function generarPdf()
     {

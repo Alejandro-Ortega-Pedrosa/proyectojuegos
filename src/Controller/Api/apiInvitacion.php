@@ -1,12 +1,11 @@
 <?php
  
-    namespace App\Controller;
+    namespace App\Controller\Api;
 
     use App\Entity\Evento;
     use App\Entity\Invitacion;
     use App\Entity\User;
     use App\Service\BotTelegram;
-    use App\Service\mail;
     use Doctrine\Persistence\ManagerRegistry;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
     use Symfony\Component\HttpFoundation\Response;
@@ -16,16 +15,14 @@
 #[Route(path:'/api', name:'api_')]
 class apiInvitacion extends AbstractController
 {
-    private mail $mail;
     private BotTelegram $botTelegram;
 
-    public function __construct(private ManagerRegistry $doctrine,  mail $mail, BotTelegram $botTelegram)
+    public function __construct(private ManagerRegistry $doctrine, BotTelegram $botTelegram)
     {
-        $this->mail =$mail;
         $this->botTelegram =$botTelegram;
     }
 
-    //CREA UNA NUEVA MESA SEGUN LOS DATOS PASADOS POR POST
+    //CREA UNA NUEVA INVITACION SEGUN LOS DATOS PASADOS POR POST
     #[Route(path:'/invitacion', name:"invitacion_new", methods:'POST')]
     public function new(Request $request): Response
     {
@@ -51,8 +48,7 @@ class apiInvitacion extends AbstractController
         $entityManager->flush();
 
         //MANDO LA INVITACION AL USUARIO
-        $this->mail->sendEmail($user->getEmail());
-        $this->botTelegram->main();
+        $this->botTelegram->main($evento->getNombre());
  
         return $this->json('Created new project successfully with id ' . $invitacion->getId());
     }

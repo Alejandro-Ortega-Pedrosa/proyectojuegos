@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{parent()}}
+     <script src="{{ asset('js/video.js') }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block body %}
+    {{parent()}}
+    
+    
+    <div class="container">
+        <div class="mb-4 mt-5"><a href="/">Home / </a><a href="/gestionReservas">Reservar / </a><a href="/video"><u>Tutorial</u></a></div>
+        
+        <video id="medio" width="820" height="500">
+            <source src="video/tutorial.mp4">
+        </video>
+
+        <audio id="medio2">
+            <source src="video/audio.mp3" type="audio/mp3">
+        </audio>
+        
+            <nav class="btn-video align-content-center">
+                <input type="button" class="btn btn-primary" id="reiniciar" value="Reiniciar">
+                <div>
+                    <input type="button" class="btn btn-primary" id="retrasar" value="&laquo;">
+                    <input type="button" class="btn btn-primary" id="play" value="&#9658;">
+                    <input type="button" class="btn btn-primary" id="adelantar" value="&raquo;">
+                </div>
+                <input type="button" class="btn btn-primary" id="silenciar" value="Silenciar">
+                <div>
+                    <label class="text-white">🔈</label>
+                    <input type="button" class="btn btn-primary" id="menosVolumen" value="-">
+                    <input type="button" class="btn btn-primary" id="masVolumen" value="+">
+                </div>
+            </nav>
+     
+    </div>
+   
+{% endblock %}

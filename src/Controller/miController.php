@@ -1,16 +1,11 @@
 <?php
     namespace App\Controller;
 
-    use App\Entity\Evento;
-use App\Form\EventoType;
-use App\Service\BotTelegram;
-use Doctrine\Persistence\ManagerRegistry;
+    use Doctrine\Persistence\ManagerRegistry;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
     use Symfony\Component\HttpFoundation\Response;
     use Symfony\Component\Routing\Annotation\Route;
-    use Doctrine\ORM\EntityManagerInterface;
-    use Symfony\Component\HttpFoundation\Request;
-
+    use Symfony\Component\Security\Http\Attribute\IsGranted;
 
     class miController extends AbstractController{
         public function __construct(private ManagerRegistry $doctrine)
@@ -25,15 +20,8 @@ use Doctrine\Persistence\ManagerRegistry;
            
         }
 
-        #[Route('/telegram', name: 'telegram')] 
-        public function telegram(BotTelegram $botTelegram):Response{
-
-            $botTelegram->main();
-
-            return $this->render('prueba.html.twig');
-           
-        }
-
+        //SE EDITA LA DISTRIBUCION DE UNA MESA
+        #[IsGranted('ROLE_ADMIN')] 
         #[Route('/gestionMesas', name: 'gestionMesas')] 
         public function gestionMesas():Response{
 
@@ -41,6 +29,8 @@ use Doctrine\Persistence\ManagerRegistry;
            
         }
 
+        //FORMULARIO PARA REALIZAR UNA NUEVA RESERVA 
+        #[IsGranted('ROLE_USER')] 
         #[Route('/gestionReservas', name: 'gestionReservas')] 
         public function gestionReservas():Response{
 
@@ -48,46 +38,37 @@ use Doctrine\Persistence\ManagerRegistry;
            
         }
 
-        #[Route('/gestionEventos/{id}', name: 'gestionEventos')] 
-        public function gestionEventos(int $id):Response{
+        //GESTION DE INVITACIONES A UN EVENTO
+        #[IsGranted('ROLE_ADMIN')] 
+        #[Route('/gestionInvitaciones/{id}', name: 'gestionInvitacionesE')] 
+        public function gestionInvitaciones(string $id):Response{
 
-
-            return $this->render('gestionEventos.html.twig', ['id' => $id]);
-           
-        }
-
-         
-        #[Route('/eventos', name: 'eventos')] 
-        public function eventos(Request $request,  EntityManagerInterface $em):Response{
-
-            $eventos = $this->doctrine
-            ->getRepository(Evento::class)
-            ->findAll();
-
-             //FORMULARIO
-             $evento = new Evento();
-    
-             $form = $this->createForm(EventoType::class, $evento);
-     
-             $form->handleRequest($request);
- 
-             if ($form->isSubmitted() && $form->isValid()) {
- 
-                 $evento = $form->getData();    
- 
-                 $em->persist($evento);
-                 $em->flush();
-             }
-
-            return $this->render('eventos.html.twig', [
-                'eventos' => $eventos,
-                'form' => $form
+            return $this->render('gestionInvitaciones.html.twig',[
+                'id' => $id,
             ]);
            
         }
 
-        
+        //GESTION DE RESERVAS DEL USUARIO ACTUAL
+        #[IsGranted('ROLE_USER')] 
+        #[Route('/gestionMisReservas', name: 'gestionMisReservas')] 
+        public function gestionMisReservas():Response{
 
+            return $this->render('gestionMisReservas.html.twig');
+           
+        }
+
+        
+        //GESTION DE RESERVAS DEL USUARIO ACTUAL
+        #[IsGranted('ROLE_USER')] 
+        #[Route('/video', name: 'video')] 
+        public function video():Response{
+
+            return $this->render('video.html.twig');
+           
+        }
+
+        
        
     }
 

@@ -6,7 +6,7 @@ use App\Entity\Reserva;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 
 class ReservaCrudController extends AbstractCrudController
@@ -21,9 +21,10 @@ class ReservaCrudController extends AbstractCrudController
     {
         yield IdField::new('id')
             ->onlyOnIndex();
-        yield DateField::new('fecha');
+        yield Field::new('fecha');
+        yield AssociationField::new('tramo');
         yield BooleanField::new('presentado');
-        yield DateField::new('fechacancelacion', 'Fecha de Cancelacion');
+        yield Field::new('fechacancelacion', 'Fecha de Cancelacion');
         yield AssociationField::new('mesa');
         yield AssociationField::new('juego');
         yield AssociationField::new('user', 'Usuario');

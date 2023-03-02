@@ -1,6 +1,6 @@
 <?php
  
-    namespace App\Controller;
+    namespace App\Controller\Api;
 
     use App\Entity\User;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,7 +35,6 @@ class apiUser extends AbstractController
                 'email' => $usuario->getEmail(),
                 'nombre' => $usuario->getNombre(),
                 'apellidos' => $usuario->getApellidos(),
-                'roles' => $usuario->getRoles()
            ];
         }
  

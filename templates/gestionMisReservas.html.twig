@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{parent()}}
+     <script src="{{ asset('js/gestionMisReservas.js') }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block body %}
+    {{parent()}}
+    <div class="container col-12">
+        <div class="col-6 text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
+            <h1 class="text-uppercase mt-5">Mis Reservas</h1>
+        </div>
+        <div class="row vh-90 justify-content-center align-align-items-center">
+            <div class="col-auto">
+                <div class="table-responsive">
+                    <div id="container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+{% endblock %}
