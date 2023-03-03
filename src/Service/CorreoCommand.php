@@ -9,29 +9,30 @@
     use Symfony\Component\Console\Input\InputInterface;
     use Symfony\Component\Console\Output\OutputInterface;
 
-    
+
     #[AsCommand(
-        name: 'app:admin:set-roles',
-        description: 'Creates a new admin.',
+        name: 'app:admin:correo',
+        description: 'Manda un correo',
         hidden: false,
-        aliases: ['app:admin:set-roles']
+        aliases: ['app:admin:correo']
     )]
 
-    class AdminCommand extends Command
+    class CorreoCommand extends Command
     {
+
+        private mail $mail;
         
-        public function __construct(private UserRepository $userRepository)
+        public function __construct(mail $mail)
         {
             parent::__construct();
+            $this->mail =$mail;
 
         }
 
         protected function execute(InputInterface $input, OutputInterface $output): int
         {
-            //BUSCA EL USUARIO POR CORREO Y ACTUALIZA SU ROL
-            $user = $this->userRepository->findOneByEmail('alexo.02@hotmail.com');
-            $user->setRoles(['ROLE_ADMIN']);
-            $this->userRepository->save($user,true);
+            //MANDA UN CORREO AL USUARIO
+            $this->mail->sendEmail('alexo.02@hotmail.com');
             return Command::SUCCESS;
         }
 
