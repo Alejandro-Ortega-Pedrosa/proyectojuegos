@@ -29,6 +29,7 @@
 
         protected function execute(InputInterface $input, OutputInterface $output): int
         {
+            //BUSCA EL USUARIO POR CORREO Y ACTUALIZA SU ROL
             $user = $this->userRepository->findOneByEmail('alexo.02@hotmail.com');
             $user->setRoles(['ROLE_ADMIN']);
             $this->userRepository->save($user,true);
