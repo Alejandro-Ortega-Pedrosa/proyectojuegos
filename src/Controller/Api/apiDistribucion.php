@@ -72,7 +72,7 @@ class apiDistribucion extends AbstractController
          $entityManager->persist($distribucion);
          $entityManager->flush();
 
-        return $this->json('Created new project successfully with id ' . $distribucion->getId());
+        return $this->json('Creada con id ' . $distribucion->getId());
      }
 
      #[Route(path:'/distribucion/{id}', name:"distribucion_edit", methods:'PUT')]
@@ -85,7 +85,7 @@ class apiDistribucion extends AbstractController
   
          //SI NO ENCUENTRA LA DITRIBUCION DEVUELVE EL MENSAJE DE ERROR
          if (!$distribucion) {
-             return $this->json('No project found for id ' . $id, 404);
+             return $this->json('No encontrada con id ' . $id, 404);
          }
 
         //BUSCO LA MESA EN LA BD SEGUN SU ID
@@ -126,7 +126,7 @@ class apiDistribucion extends AbstractController
  
         //SI NO ENCUENTRA LA DISTRIBUCION DEVUELVE EL MENSAJE DE ERROR
         if (!$distribucion) {
-            return $this->json('No project found for id' . $id, 404);
+            return $this->json('No encontrada con id' . $id, 404);
         }
  
         //BORRA LA DISTRIBUCION DE LA BASE DE DATOS
@@ -134,7 +134,7 @@ class apiDistribucion extends AbstractController
         $entityManager->flush();
  
         //UNA VEZ BORRADA DEVUELVE EL MENSAJE DE Q SE HA BORRADO CORRECTAMENTE
-        return $this->json('Deleted a project successfully with id ' . $id);
+        return $this->json('Se ha borrado con id ' . $id);
     }
   
 }

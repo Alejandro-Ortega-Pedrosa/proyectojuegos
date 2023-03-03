@@ -108,7 +108,7 @@ class apiReserva extends AbstractController
          $entityManager->persist($reserva);
          $entityManager->flush();
   
-         return $this->json('Created new project successfully with id ' . $reserva->getId());
+         return $this->json('Creada con id ' . $reserva->getId());
      }
 
       //BORRA UNA RESERVA DE LA BASE DE DATOS SEGUN SU ID
@@ -121,7 +121,7 @@ class apiReserva extends AbstractController
    
           //SI NO ENCUENTRA LA RESERVA DEVUELVE EL MENSAJE DE ERROR
           if (!$reserva) {
-              return $this->json('No project found for id' . $id, 404);
+              return $this->json('No encontrada con id' . $id, 404);
           }
    
           //BORRA LA RESERVA DE LA BASE DE DATOS
@@ -129,7 +129,7 @@ class apiReserva extends AbstractController
           $entityManager->flush();
    
           //UNA VEZ BORRADA DEVUELVE EL MENSAJE DE QUE SE HA BORRADO CORRECTAMENTE
-          return $this->json('Deleted a project successfully with id ' . $id);
+          return $this->json('Se ha borrado con id ' . $id);
       }
 
 }

@@ -62,7 +62,7 @@ class apiMesa extends AbstractController
         $entityManager->persist($mesa);
         $entityManager->flush();
  
-        return $this->json('Created new project successfully with id ' . $mesa->getId());
+        return $this->json('Creada con id ' . $mesa->getId());
     }
  
 
@@ -78,7 +78,7 @@ class apiMesa extends AbstractController
         //SI NO ENCUENTRA LA MESA SALTA EL MENSAJE DE ERROR
         if (!$mesa) {
  
-            return $this->json('No project found for id' . $id, 404);
+            return $this->json('No encontrada con id' . $id, 404);
         }
  
         //CREA EL ARRAY CON LOS DATOS DE LA MESA
@@ -104,7 +104,7 @@ class apiMesa extends AbstractController
  
         //SI NO ENCUENTRA LA MESA DEVUELVE EL MENSAJE DE ERROR
         if (!$mesa) {
-            return $this->json('No project found for id ' . $id, 404);
+            return $this->json('No encontrada con id ' . $id, 404);
         }
  
          //CREO LA NUEVA MESA CON LAS PROPIEDADES 
@@ -139,7 +139,7 @@ class apiMesa extends AbstractController
  
         //SI NO ENCUENTRA LA MESA DEVUELVE EL MENSAJE DE ERROR
         if (!$mesa) {
-            return $this->json('No project found for id' . $id, 404);
+            return $this->json('No encontrada con id' . $id, 404);
         }
  
         //BORRA LA MESA DE LA BASE DE DATOS
@@ -147,7 +147,7 @@ class apiMesa extends AbstractController
         $entityManager->flush();
  
         //UNA VEZ BORRADA DEVUELVE EL MENSAJE DE Q SE HA BORRADO CORRECTAMENTE
-        return $this->json('Deleted a project successfully with id ' . $id);
+        return $this->json('Se ha borrado con id ' . $id);
     }
  
  

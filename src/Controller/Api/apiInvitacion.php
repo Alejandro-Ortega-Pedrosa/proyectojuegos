@@ -50,6 +50,6 @@ class apiInvitacion extends AbstractController
         //MANDO LA INVITACION AL USUARIO
         $this->botTelegram->main($evento->getNombre());
  
-        return $this->json('Created new project successfully with id ' . $invitacion->getId());
+        return $this->json('Creada con id ' . $invitacion->getId());
     }
 }

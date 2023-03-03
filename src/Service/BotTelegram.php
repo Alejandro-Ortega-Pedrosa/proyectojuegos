@@ -7,13 +7,12 @@ use Psr\Log\LoggerInterface;
 class BotTelegram
 
 {
-    //Telegram Bot data
+    //cAMPOS DE TELEGRAM
     private $token;
     private $urlstart;
     private $urlend;
     private $chatid;
 
-    //LoggerInterface 
     private $logger;
 
     public function __construct($token, $urlstart, $urlend, $chatid, LoggerInterface $logger)
@@ -56,7 +55,12 @@ class BotTelegram
 
     public function main(string $evento)
     {
+        //COGE EL ID DEL SERVICES.YAML
         $chatid = $this->getChatid();
+
+        //PARA MANDARSELO A UN USUARIO EN CONCRETO PASANDO EL USUARIO A LA FUNCION
+        //$chatid = $user->ggetIdTelegram();
+
         $content = array (
             'headers' => array("Content-Type" => "application/x-www-form-urlencoded"),
             "body"  => array("chat_id" => $chatid, "text" => "Has sido invitado al evento ".$evento),
