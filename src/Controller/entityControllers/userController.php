@@ -1,5 +1,5 @@
 <?php
-    namespace App\Controller;
+    namespace App\Controller\entityControllers;
 
     use App\Form\UserType;
     use Doctrine\ORM\EntityManagerInterface;

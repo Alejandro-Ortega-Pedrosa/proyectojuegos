@@ -1,5 +1,5 @@
 <?php
-    namespace App\Controller;
+    namespace App\Controller\entityControllers;
 
     use App\Entity\Evento;
     use App\Entity\Invitacion;
