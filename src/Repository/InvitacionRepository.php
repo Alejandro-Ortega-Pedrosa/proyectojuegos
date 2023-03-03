@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Invitacion;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -38,6 +39,7 @@ class InvitacionRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
 
 //    /**
 //     * @return Invitacion[] Returns an array of Invitacion objects
